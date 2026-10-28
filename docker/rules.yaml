@@ -1,0 +1,7 @@
+# Container config: everything lives on the /data volume.
+inbox: /data/inbox
+destination: /data/sorted
+catalog: /data/sortsmart.db
+date_subfolders: true
+logging: {dir: /data/logs}
+plugins: {dir: /data/plugins, builtin: [invoice, screenshot]}

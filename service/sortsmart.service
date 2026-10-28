@@ -1,0 +1,18 @@
+[Unit]
+Description=SortSmart file intake watcher
+After=network.target
+
+[Service]
+Type=simple
+# Edit User and the paths below, or run service/install_linux.sh which fills them in.
+User=sortsmart
+Environment=SORTSMART_CONFIG=/etc/sortsmart/rules.yaml
+ExecStart=/usr/local/bin/sortsmart watch
+Restart=on-failure
+RestartSec=5
+# Files are moved, never deleted; still keep the service away from the rest of the system.
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
