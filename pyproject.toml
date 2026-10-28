@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sortsmart"
+version = "0.1.0"
+description = "A reusable file intake engine: content-based type detection, de-duplication, quarantine and a restorable catalog."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+dependencies = [
+    "PyYAML>=6",
+    "watchdog>=3",
+    "Pillow>=9",
+]
+
+[project.optional-dependencies]
+dashboard = ["streamlit>=1.30"]
+pdf = ["pypdf>=3"]
+magic = ["python-magic>=0.4.27"]
+dev = ["pytest>=7"]
+
+[project.scripts]
+sortsmart = "sortsmart.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["sortsmart*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

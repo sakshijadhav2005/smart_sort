@@ -1,0 +1,61 @@
+# SortSmart configuration. Relative paths are relative to this file.
+
+inbox: ./inbox                  # folder `sortsmart watch` reads from
+destination: ./sorted           # Images/, Videos/, ..., Duplicates/, Quarantine/
+catalog: ./sortsmart.db         # SQLite catalog of every move
+
+date_subfolders: true           # Images/2026/10/...
+date_format: "%Y/%m"
+date_source: modified           # modified (file mtime) | processed (now)
+
+quarantine_mismatch: true       # quarantine files whose extension lies about the content
+deep_check_max_mb: 200          # integrity-check files up to this size
+
+folders:
+  duplicates: Duplicates
+  quarantine: Quarantine
+
+# Move a detected type or an extension to another (or a new) category.
+categories:
+  # Code: [py, js, code]
+
+# Custom rules, checked in order after plugins and before default categories.
+# Conditions: type, category, extension, name_contains, name_glob, name_regex,
+#             text_contains, min_size_mb, max_size_mb
+rules:
+  - name: large-videos
+    match: {category: Videos, min_size_mb: 1024}
+    destination: Videos/Large
+  - name: bank-statements
+    match: {type: pdf, name_contains: [statement]}
+    destination: Documents/Statements
+
+ignore: ["*.part", "*.crdownload", "*.download", "*.tmp", "*.partial",
+         "~$*", ".~lock*", ".DS_Store", "desktop.ini", "Thumbs.db"]
+
+stability:                      # wait until size stops changing before sorting
+  interval: 0.5
+  checks: 2
+  timeout: 300
+
+retry: {attempts: 3, delay: 0.5}
+
+logging:
+  dir: ./logs
+  level: INFO
+  max_bytes: 5242880
+  backups: 5
+
+plugins:
+  enabled: true
+  dir: ./plugins                # drop-in *.py plugins, loaded at startup
+  builtin: [invoice, screenshot]   # also available: slack_alert
+  settings:
+    slack_alert:
+      webhook_url: ""           # or set SORTSMART_SLACK_WEBHOOK
+
+health:
+  min_free_mb: 500
+  stuck_after: 300              # seconds a file may wait in the inbox
+  interval: 60
+  max_queue: 1000
